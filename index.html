@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snake Parabola - Matematikë</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --bg: #0d0b11;
+    --panel: #17131e;
+    --purple: #9560c9;
+    --purple2: #b58be0;
+    --white: #f3eff8;
+    --muted: #a49bad;
+    --border: #30273b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+header {
+    height: 72px;
+    padding: 0 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: var(--purple2);
+}
+
+nav {
+    display: flex;
+    gap: 28px;
+}
+
+nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+}
+
+nav a:hover {
+    color: white;
+}
+
+.container {
+    width: 84%;
+    max-width: 1050px;
+    margin: auto;
+}
+
+.page {
+    display: none;
+    animation: appear .3s ease;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes appear {
+    from {opacity: 0; transform: translateY(8px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+/* KRYEFAQJA */
+
+.home {
+    padding: 95px 0 70px;
+}
+
+.small-title {
+    color: var(--purple2);
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+}
+
+.home h1 {
+    font-size: clamp(38px, 6vw, 65px);
+    line-height: 1.12;
+    max-width: 680px;
+    letter-spacing: -3px;
+    margin-bottom: 24px;
+}
+
+.home h1 span {
+    color: var(--purple2);
+}
+
+.description {
+    max-width: 530px;
+    color: var(--muted);
+    line-height: 1.8;
+    font-size: 15px;
+    margin-bottom: 32px;
+}
+
+.primary-btn {
+    background: var(--purple);
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.primary-btn:hover {
+    background: #aa78dc;
+    transform: translateY(-2px);
+}
+
+.home-info {
+    display: flex;
+    gap: 35px;
+    margin-top: 85px;
+    padding-top: 25px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+}
+
+.info-item strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 7px;
+}
+
+.info-item small {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* MESIMI */
+
+.section {
+    padding: 65px 0;
+}
+
+.section-label {
+    color: var(--purple2);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    margin-bottom: 15px;
+}
+
+.section h2 {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.section-desc {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+
+.quiz-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 30px;
+    max-width: 650px;
+    border-radius: 9px;
+}
+
+.equation {
+    background: #21192c;
+    border-left: 3px solid var(--purple);
+    padding: 23px;
+    font-size: 27px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.lesson-input {
+    width: 100%;
+    margin-top: 9px;
+    padding: 14px;
+    background: #0d0b11;
+    color: white;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+}
+
+.lesson-input:focus {
+    border-color: var(--purple2);
+}
+
+.lesson-progress {
+    height: 5px;
+    background: #30273b;
+    border-radius: 5px;
+    margin-bottom: 25px;
+}
+
+.lesson-progress-fill {
+    height: 5px;
+    width: 33%;
+    background: var(--purple2);
+    border-radius: 5px;
+    transition: width .3s;
+}
+
+/* LOJA */
+
+.game-layout {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 20px;
+    align-items: start;
+}
+
+.game-area {
+    background: var(--panel);
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-align: center;
+}
+
+canvas {
+    width: 100%;
+    max-width: 525px;
+    background: #0b0910;
+    border: 1px solid #40334e;
+    border-radius: 4px;
+    display: block;
+    margin: auto;
+}
+
+.game-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.stat {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 17px;
+    border-radius: 7px;
+}
+
+.stat small {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    margin-bottom: 9px;
+}
+
+.stat strong {
+    font-size: 24px;
+    color: var(--purple2);
+}
+
+.game-buttons {
+    display: flex;
+    gap: 9px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.secondary-btn {
+    padding: 10px 16px;
+    background: #241c2d;
+    border: 1px solid var(--border);
+    color: white;
+    border-radius: 5px;
+}
+
+.secondary-btn:hover {
+    border-color: var(--purple);
+}
+
+.instructions {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.8;
+    margin-top: 18px;
+    text-align: left;
+}
+
+/* PËRFUNDIMI */
+
+.result-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 40px;
+    border-radius: 8px;
+    max-width: 550px;
+}
+
+.result-box p {
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 15px 0 25px;
+}
+
+.mobile-controls {
+    display: none;
+    margin-top: 15px;
+    grid-template-columns: repeat(3, 48px);
+    justify-content: center;
+    gap: 5px;
+}
+
+.mobile-controls button {
+    height: 43px;
+    background: #281d34;
+    border: 1px solid var(--border);
+    color: white;
+    border-radius: 5px;
+    font-size: 17px;
+}
+
+footer {
+    border-top: 1px solid var(--border);
+    padding: 22px 8%;
+    color: var(--muted);
+    font-size: 11px;
+    text-align: center;
+    margin-top: 55px;
+}
+
+@media(max-width: 750px) {
+    header {
+        padding: 0 5%;
+    }
+
+    .container {
+        width: 90%;
+    }
+
+    nav {
+        gap: 13px;
+    }
+
+    nav a {
+        font-size: 11px;
+    }
+
+    .home {
+        padding-top: 65px;
+    }
+
+    .home h1 {
+        letter-spacing: -1.5px;
+    }
+
+    .game-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .game-sidebar {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .mobile-controls {
+        display: grid;
+    }
+
+    .quiz-box {
+        padding: 20px;
+    }
+}
+
+@media(max-width: 420px) {
+    nav {
+        gap: 9px;
+    }
+
+    nav a {
+        font-size: 10px;
+    }
+
+    .game-sidebar {
+        gap: 6px;
+    }
+
+    .stat {
+        padding: 12px 8px;
+    }
+
+    .stat strong {
+        font-size: 19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">SNAKE<span> / </span>PARABOLA</div>
+
+    <nav>
+        <a href="#" onclick="showPage('home')">Kryefaqja</a>
+        <a href="#" onclick="showPage('quiz')">Mësimi</a>
+        <a href="#" onclick="showPage('game')">Loja</a>
+    </nav>
+</header>
+
+<main class="container">
+
+<!-- KRYEFAQJA -->
+
+<section id="home" class="page active">
+
+    <div class="home">
+
+        <div class="small-title">
+            PROJEKT MATEMATIKOR • LOJË INTERAKTIVE
+        </div>
+
+        <h1>
+            Matematika në një mënyrë
+            <span>ndryshe.</span>
+        </h1>
+
+        <p class="description">
+            Snake Parabola është një lojë që bashkon matematikën me
+            programimin. Zgjidh fillimisht një ushtrim për funksionet
+            kuadratike dhe më pas provo të drejtosh gjarprin në grafik.
+        </p>
+
+        <button class="primary-btn" onclick="showPage('quiz')">
+            Fillo mësimin →
+        </button>
+
+        <div class="home-info">
+
+            <div class="info-item">
+                <strong>01 / Matematikë</strong>
+                <small>Mëso formulën</small>
+            </div>
+
+            <div class="info-item">
+                <strong>02 / Ushtrime</strong>
+                <small>Zgjidh ekuacionin</small>
+            </div>
+
+            <div class="info-item">
+                <strong>03 / Lojë</strong>
+                <small>Provo njohuritë</small>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- MËSIMI INTERAKTIV -->
+
+<section id="quiz" class="page section">
+
+    <div class="section-label">MËSO PARA SE TË LUAJSH</div>
+
+    <h2>Le të zgjidhim një parabolë</h2>
+
+    <p class="section-desc">
+        Ndiq hapat një nga një. Qëllimi nuk është vetëm të gjesh
+        përgjigjen, por të kuptosh si zgjidhet një funksion kuadratik.
+    </p>
+
+    <div class="quiz-box">
+
+        <div style="display:flex;justify-content:space-between;
+        color:var(--muted);font-size:12px;margin-bottom:18px;">
+
+            <span id="stepLabel">HAPI 1 NGA 3</span>
+            <span id="progressText">33%</span>
+
+        </div>
+
+        <div class="lesson-progress">
+            <div id="progressBar" class="lesson-progress-fill"></div>
+        </div>
+
+        <div class="equation">
+            y = x² - 4x + 3
+        </div>
+
+        <div id="lessonContent">
+
+            <h3 style="margin-bottom:12px;">
+                Hapi 1 – Gjej vlerën e X
+            </h3>
+
+            <p style="color:var(--muted);font-size:14px;
+            line-height:1.8;margin-bottom:20px;">
+
+                Për të gjetur kulmin e parabolës përdorim formulën:
+
+            </p>
+
+            <div style="background:#21192c;padding:18px;
+            text-align:center;border-radius:6px;margin-bottom:20px;">
+
+                <span style="font-size:23px;font-weight:bold;
+                color:#c69bed;">
+                    x = -b / 2a
+                </span>
+
+            </div>
+
+            <p style="font-size:14px;line-height:1.8;
+            margin-bottom:18px;">
+
+                Në ekuacionin tonë kemi:
+
+                <br><br>
+                a = 1
+                <br>
+                b = -4
+
+                <br><br>
+
+                Zëvendëso numrat në formulë dhe gjej X.
+
+            </p>
+
+            <label style="font-size:13px;color:var(--muted);">
+                Sa është vlera e X?
+            </label>
+
+            <input id="answerX" type="number"
+            class="lesson-input"
+            placeholder="Shkruaj përgjigjen">
+
+            <div id="feedbackX" style="margin-top:15px;
+            font-size:13px;line-height:1.7;"></div>
+
+            <button class="primary-btn" style="margin-top:18px;"
+            onclick="checkX()">
+                Kontrollo X →
+            </button>
+
+        </div>
+    </div>
+</section>
+
+<!-- LOJA -->
+
+<section id="game" class="page section">
+
+    <div class="section-label">HAPI 02</div>
+
+    <h2>Snake Parabola</h2>
+
+    <p class="section-desc">
+        Drejto gjarprin dhe mblidh pikat që shfaqen në grafik.
+        Përdor shigjetat në tastierë për të lëvizur.
+    </p>
+
+    <div class="game-layout">
+
+        <div class="game-area">
+
+            <canvas id="gameCanvas" width="525" height="375"></canvas>
+
+            <div class="game-buttons">
+                <button class="secondary-btn" onclick="togglePause()"
+                id="pauseBtn">Pusho</button>
+
+                <button class="secondary-btn" onclick="resetGame()">
+                    Rifillo
+                </button>
+            </div>
+
+            <div class="mobile-controls">
+                <span></span>
+                <button onclick="changeDirection('up')">↑</button>
+                <span></span>
+
+                <button onclick="changeDirection('left')">←</button>
+                <button onclick="changeDirection('down')">↓</button>
+                <button onclick="changeDirection('right')">→</button>
+            </div>
+
+        </div>
+
+        <div class="game-sidebar">
+
+            <div class="stat">
+                <small>PIKËT</small>
+                <strong id="score">0</strong>
+            </div>
+
+            <div class="stat">
+                <small>JETËT</small>
+                <strong id="lives">3</strong>
+            </div>
+
+            <div class="stat">
+                <small>NIVELI</small>
+                <strong id="level">1</strong>
+            </div>
+
+            <div class="instructions">
+
+                <strong style="color:white;">Udhëzime</strong>
+                <br>
+                ↑ Lart
+                <br>
+                ↓ Poshtë
+                <br>
+                ← Majtas
+                <br>
+                → Djathtas
+
+                <br><br>
+
+                Mblidh pikat dhe shmang përplasjen me muret ose me veten.
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PËRFUNDIMI -->
+
+<section id="result" class="page section">
+
+    <div class="result-box">
+
+        <div class="section-label">PËRFUNDIMI</div>
+
+        <h2 id="resultTitle">Loja përfundoi!</h2>
+
+        <p id="resultText">
+            Rezultati yt do të shfaqet këtu.
+        </p>
+
+        <button class="primary-btn"
+        onclick="resetGame(); showPage('game')">
+            Luaj përsëri
+        </button>
+
+        <button class="secondary-btn" onclick="showPage('home')">
+            Kryefaqja
+        </button>
+
+    </div>
+</section>
+
+</main>
+
+<footer>
+    Snake Parabola · Projekt matematikor dhe programimi
+</footer>
+
+<script>
+
+/* NAVIGIMI */
+
+function showPage(pageId) {
+
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+    });
+
+    document.getElementById(pageId).classList.add('active');
+}
+
+/* MËSIMI INTERAKTIV */
+
+let lessonStep = 1;
+
+function updateProgress(step) {
+
+    document.getElementById("stepLabel").textContent =
+        "HAPI " + step + " NGA 3";
+
+    document.getElementById("progressText").textContent =
+        Math.round(step / 3 * 100) + "%";
+
+    document.getElementById("progressBar").style.width =
+        (step / 3 * 100) + "%";
+}
+
+function checkX() {
+
+    const value = document.getElementById("answerX").value;
+    const feedback = document.getElementById("feedbackX");
+
+    if (value.trim() === "") {
+
+        feedback.style.color = "#e5a45e";
+        feedback.textContent = "Shkruaj fillimisht një përgjigje.";
+        return;
+    }
+
+    if (Number(value) === 2) {
+
+        feedback.style.color = "#a8dfad";
+
+        feedback.innerHTML =
+            "Saktë! x = -(-4) / (2 × 1) = 4 / 2 = 2.";
+
+        setTimeout(showStep2, 1000);
+
+    } else {
+
+        feedback.style.color = "#e58b8b";
+
+        feedback.textContent =
+            "Nuk është e saktë. Kujto formulën: x = -b / 2a. Provo përsëri.";
+    }
+}
+
+function showStep2() {
+
+    lessonStep = 2;
+    updateProgress(2);
+
+    document.getElementById("lessonContent").innerHTML = `
+
+        <h3 style="margin-bottom:12px;">
+            Hapi 2 – Gjej vlerën e Y
+        </h3>
+
+        <p style="color:var(--muted);font-size:14px;
+        line-height:1.8;margin-bottom:20px;">
+
+            Tashmë kemi gjetur se x = 2.
+            Tani duhet ta zëvendësojmë këtë vlerë në ekuacionin fillestar.
+
+        </p>
+
+        <div style="background:#21192c;padding:18px;
+        border-radius:6px;margin-bottom:20px;line-height:2;">
+
+            y = x² - 4x + 3
+            <br>
+            y = 2² - 4 × 2 + 3
+            <br>
+            y = 4 - 8 + 3
+
+        </div>
+
+        <label style="font-size:13px;color:var(--muted);">
+            Sa është vlera e Y?
+        </label>
+
+        <input id="answerY" type="number"
+        class="lesson-input"
+        placeholder="Shkruaj përgjigjen">
+
+        <div id="feedbackY" style="margin-top:15px;
+        font-size:13px;line-height:1.7;"></div>
+
+        <button class="primary-btn" style="margin-top:18px;"
+        onclick="checkY()">
+            Kontrollo Y →
+        </button>
+
+    `;
+}
+
+function checkY() {
+
+    const value = document.getElementById("answerY").value;
+    const feedback = document.getElementById("feedbackY");
+
+    if (value.trim() === "") {
+
+        feedback.style.color = "#e5a45e";
+        feedback.textContent = "Shkruaj fillimisht një përgjigje.";
+        return;
+    }
+
+    if (Number(value) === -1) {
+
+        feedback.style.color = "#a8dfad";
+
+        feedback.innerHTML =
+            "Shumë mirë! y = 4 - 8 + 3 = -1.";
+
+        setTimeout(showStep3, 1000);
+
+    } else {
+
+        feedback.style.color = "#e58b8b";
+
+        feedback.textContent =
+            "Përgjigjja nuk është e saktë. Llogarit përsëri: 4 - 8 + 3.";
+    }
+}
+
+function showStep3() {
+
+    lessonStep = 3;
+    updateProgress(3);
+
+    document.getElementById("lessonContent").innerHTML = `
+
+        <h3 style="margin-bottom:12px;">
+            Hapi 3 – Përfundimi
+        </h3>
+
+        <p style="color:var(--muted);font-size:14px;
+        line-height:1.8;margin-bottom:20px;">
+
+            Tani i kemi të dyja koordinatat e kulmit të parabolës.
+
+        </p>
+
+        <div style="background:#21192c;padding:25px;
+        text-align:center;border-radius:6px;margin-bottom:20px;">
+
+            <p style="font-size:13px;color:var(--muted);">
+                KOORDINATAT E KULMIT
+            </p>
+
+            <h2 style="color:#c69bed;margin-top:10px;">
+                K (2, -1)
+            </h2>
+
+        </div>
+
+        <p style="font-size:14px;line-height:1.8;
+        color:var(--muted);margin-bottom:20px;">
+
+            Përfundim: Kulmi i parabolës ndodhet në pikën (2, -1).
+            Kjo pikë është minimumi i funksionit, sepse koeficienti
+            a është pozitiv dhe parabola hapet lart.
+
+        </p>
+
+        <button class="primary-btn" onclick="finishLesson()">
+            E kuptova – Fillo lojën →
+        </button>
+
+    `;
+}
+
+function finishLesson() {
+
+    showPage("game");
+    resetGame();
+}
+
+/* LOJA SNAKE */
+
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+const cell = 25;
+const cols = 21;
+const rows = 15;
+
+let snake;
+let direction;
+let nextDirection;
+let food;
+
+let score = 0;
+let lives = 3;
+let level = 1;
+
+let gameRunning = false;
+let paused = false;
+let gameInterval;
+
+function resetGame() {
+
+    clearInterval(gameInterval);
+
+    snake = [
+        {x: 5, y: 7},
+        {x: 4, y: 7},
+        {x: 3, y: 7}
+    ];
+
+    direction = "right";
+    nextDirection = "right";
+
+    score = 0;
+    lives = 3;
+    level = 1;
+
+    paused = false;
+    gameRunning = true;
+
+    document.getElementById("pauseBtn").textContent = "Pusho";
+
+    updateStats();
+    createFood();
+    drawGame();
+    startLoop();
+}
+
+function startLoop() {
+
+    clearInterval(gameInterval);
+
+    gameInterval = setInterval(() => {
+
+        if (!gameRunning || paused) return;
+
+        moveSnake();
+
+    }, Math.max(75, 160 - (level - 1) * 15));
+}
+
+function createFood() {
+
+    let x, y;
+
+    do {
+
+        x = Math.floor(Math.random() * cols);
+        y = Math.floor(Math.random() * rows);
+
+    } while (
+        snake.some(part => part.x === x && part.y === y)
+    );
+
+    food = {x, y};
+}
+
+function moveSnake() {
+
+    direction = nextDirection;
+
+    let head = {...snake[0]};
+
+    if (direction === "up") head.y--;
+    if (direction === "down") head.y++;
+    if (direction === "left") head.x--;
+    if (direction === "right") head.x++;
+
+    const hitWall =
+        head.x < 0 || head.x >= cols ||
+        head.y < 0 || head.y >= rows;
+
+    const hitSelf = snake.some(part =>
+        part.x === head.x && part.y === head.y
+    );
+
+    if (hitWall || hitSelf) {
+
+        lives--;
+        updateStats();
+
+        if (lives <= 0) {
+            endGame();
+            return;
+        }
+
+        snake = [
+            {x: 5, y: 7},
+            {x: 4, y: 7},
+            {x: 3, y: 7}
+        ];
+
+        direction = "right";
+        nextDirection = "right";
+
+        drawGame();
+        return;
+    }
+
+    snake.unshift(head);
+
+    if (head.x === food.x && head.y === food.y) {
+
+        score += 10;
+
+        if (score % 50 === 0) {
+            level++;
+            startLoop();
+        }
+
+        createFood();
+
+    } else {
+
+        snake.pop();
+    }
+
+    updateStats();
+    drawGame();
+}
+
+function drawGame() {
+
+    ctx.fillStyle = "#0b0910";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Rrjeti
+
+    ctx.strokeStyle = "#292230";
+    ctx.lineWidth = 1;
+
+    for (let x = 0; x <= canvas.width; x += cell) {
+
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+    }
+
+    for (let y = 0; y <= canvas.height; y += cell) {
+
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+    }
+
+    // Boshtet
+
+    ctx.strokeStyle = "#6f5689";
+    ctx.lineWidth = 1.5;
+
+    ctx.beginPath();
+    ctx.moveTo(canvas.width / 2, 0);
+    ctx.lineTo(canvas.width / 2, canvas.height);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(0, canvas.height / 2);
+    ctx.lineTo(canvas.width, canvas.height / 2);
+    ctx.stroke();
+
+    // Pikat e parabolës
+
+    ctx.fillStyle = "#a77bd0";
+
+    for (let x = 0; x < cols; x++) {
+
+        let y = Math.round(0.12 * Math.pow(x - 10, 2) + 2);
+
+        if (y >= 0 && y < rows) {
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x * cell + 12.5,
+                y * cell + 12.5,
+                3,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+        }
+    }
+
+    // Ushqimi
+
+    ctx.fillStyle = "#c69bed";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        food.x * cell + 12.5,
+        food.y * cell + 12.5,
+        8,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+    // Gjarpri
+
+    snake.forEach((part, index) => {
+
+        ctx.fillStyle = index === 0 ? "#d1a8f4" : "#8755b3";
+
+        ctx.fillRect(
+            part.x * cell + 2,
+            part.y * cell + 2,
+            cell - 4,
+            cell - 4
+        );
+    });
+
+    if (paused) {
+
+        ctx.fillStyle = "rgba(10,8,15,0.75)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "white";
+        ctx.font = "bold 25px Inter";
+        ctx.textAlign = "center";
+
+        ctx.fillText(
+            "LOJA NË PAUZË",
+            canvas.width / 2,
+            canvas.height / 2
+        );
+    }
+}
+
+function updateStats() {
+
+    document.getElementById("score").textContent = score;
+    document.getElementById("lives").textContent = lives;
+    document.getElementById("level").textContent = level;
+}
+
+function changeDirection(newDirection) {
+
+    if (!gameRunning || paused) return;
+
+    if (newDirection === "up" && direction !== "down") {
+        nextDirection = "up";
+    }
+
+    if (newDirection === "down" && direction !== "up") {
+        nextDirection = "down";
+    }
+
+    if (newDirection === "left" && direction !== "right") {
+        nextDirection = "left";
+    }
+
+    if (newDirection === "right" && direction !== "left") {
+        nextDirection = "right";
+    }
+}
+
+document.addEventListener("keydown", function(event) {
+
+    const keys = {
+
+        ArrowUp: "up",
+        ArrowDown: "down",
+        ArrowLeft: "left",
+        ArrowRight: "right",
+
+        w: "up",
+        s: "down",
+        a: "left",
+        d: "right"
+    };
+
+    if (keys[event.key]) {
+
+        event.preventDefault();
+        changeDirection(keys[event.key]);
+    }
+});
+
+function togglePause() {
+
+    if (!gameRunning) return;
+
+    paused = !paused;
+
+    document.getElementById("pauseBtn").textContent =
+        paused ? "Vazhdo" : "Pusho";
+
+    drawGame();
+}
+
+function endGame() {
+
+    gameRunning = false;
+    clearInterval(gameInterval);
+
+    document.getElementById("resultTitle").textContent =
+        "Loja përfundoi!";
+
+    document.getElementById("resultText").textContent =
+        "Ke arritur " + score + " pikë dhe nivelin " + level +
+        ". Provo përsëri për të arritur një rezultat më të mirë.";
+
+    showPage("result");
+}
+
+/* PAMJA FILLESTARE */
+
+snake = [
+    {x: 5, y: 7},
+    {x: 4, y: 7},
+    {x: 3, y: 7}
+];
+
+direction = "right";
+nextDirection = "right";
+food = {x: 12, y: 5};
+
+drawGame();
+updateStats();
+
+</script>
+
+</body>
+</html>
